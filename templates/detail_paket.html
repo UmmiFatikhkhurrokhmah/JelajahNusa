@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load jn_tags %}
+{% block content %}
+<section class="panel p-0 overflow-hidden">
+  {% foto_kota pkg.kota as foto %}
+  <div class="cover city-{{ pkg.kota|slugify }}{% if foto %} has-photo{% endif %}" style="height:220px;font-size:3.4rem"
+    role="img" aria-label="{% if foto %}Foto{% else %}Ilustrasi{% endif %} kota {{ pkg.kota }}">
+    {% if foto %}<img src="{{ foto }}" alt="" loading="lazy">{% else %}<i
+      class="fa-solid {{ pkg.kota|city_icon }}"></i><span class="cover-tag">Ilustrasi</span>{% endif %}
+  </div>
+  <div class="p-4">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+      <div>
+        <h2 class="mb-1">{{ pkg.label }}</h2>
+        <span class="chip"><i class="fa-solid fa-location-dot"></i>{{ pkg.kota }}</span>
+        <span class="chip sand ms-1">{{ pkg.jumlah_destinasi }} destinasi</span>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn-jn-ghost" href="{% url 'wisata' %}"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+        <a class="btn-jn" href="{% url 'rekomendasi' %}?paket={{ pkg.id }}"><i
+            class="fa-solid fa-wand-magic-sparkles"></i> Cari paket serupa</a>
+      </div>
+    </div>
+
+    <h3 class="h5 mt-4">Destinasi dalam paket</h3>
+    <ol class="list-group list-group-numbered mt-2">
+      {% for s in slots %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span class="ms-2">{% if s.nama %}{{ s.nama }}{% else %}<span class="text-muted-jn">Tidak ada data di
+            dataset</span>{% endif %}</span>
+        <small class="text-muted-jn">Place_Tourism{{ s.nomor }}</small>
+      </li>
+      {% endfor %}
+    </ol>
+
+    <h3 class="h5 mt-4">Informasi dari dataset</h3>
+    <table class="table-jn mt-2" style="max-width:520px">
+      <tbody>
+        <tr>
+          <th scope="row">Package</th>
+          <td>{{ pkg.id }}</td>
+        </tr>
+        <tr>
+          <th scope="row">City</th>
+          <td>{{ pkg.kota }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Jumlah destinasi terisi</th>
+          <td>{{ pkg.jumlah_destinasi }} dari 5</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="text-muted-jn small mt-3 mb-0">Dataset tidak memuat harga, rating, fasilitas, maupun durasi perjalanan,
+      sehingga informasi tersebut tidak ditampilkan.</p>
+  </div>
+</section>
+{% endblock %}

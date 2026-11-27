@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static jn_tags %}
+{% block content %}
+<section class="hero">
+  {% foto_hero as hero %}
+  <img src="{% if hero %}{{ hero }}{% else %}{% static 'images/hero.svg' %}{% endif %}"
+    alt="Pemandangan wisata Indonesia">
+  <div class="hero-body">
+    <h2>Jelajahi Keindahan Indonesia Bersama JelajahNusa</h2>
+    <p>Temukan paket wisata yang sesuai dengan minat perjalananmu melalui sistem rekomendasi cerdas.</p>
+    <div class="d-flex flex-wrap gap-2 mt-4">
+      <a class="btn-jn" href="{% url 'wisata' %}"><i class="fa-solid fa-compass"></i> Jelajahi Wisata</a>
+      <a class="btn-jn-soft" href="{% url 'rekomendasi' %}"><i class="fa-solid fa-wand-magic-sparkles"></i> Cari
+        Rekomendasi</a>
+    </div>
+  </div>
+  {% if not hero %}<span class="hero-note">Gambar: ilustrasi</span>{% endif %}
+</section>
+
+<section class="row g-3 mt-1" aria-label="Statistik dataset">
+  <div class="col-6 col-xl-3">
+    <div class="stat"><span class="stat-icon"><i class="fa-solid fa-suitcase-rolling"></i></span>
+      <div>
+        <div class="stat-value">{{ stats.total_paket }}</div>
+        <div class="stat-label">Total Paket Wisata</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="stat"><span class="stat-icon"><i class="fa-solid fa-city"></i></span>
+      <div>
+        <div class="stat-value">{{ stats.total_kota }}</div>
+        <div class="stat-label">Total Kota</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="stat"><span class="stat-icon"><i class="fa-solid fa-map-location-dot"></i></span>
+      <div>
+        <div class="stat-value">{{ stats.total_destinasi }}</div>
+        <div class="stat-label">Total Destinasi Wisata</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-xl-3">
+    <div class="stat"><span class="stat-icon"><i class="fa-solid fa-diagram-project"></i></span>
+      <div>
+        <div class="stat-value small">{{ stats.metode }}</div>
+        <div class="stat-label">Metode Rekomendasi</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-title">
+  <div>
+    <h2>Rekomendasi Pilihan</h2>
+    <p>Satu paket contoh dari tiap kota di dataset.</p>
+  </div>
+  <a href="{% url 'wisata' %}" class="btn-jn-ghost btn-sm-jn">Lihat semua</a>
+</div>
+<div class="row g-4">
+  {% for p in featured %}
+  <div class="col-md-6 col-xl-4">{% include "_paket_card.html" %}</div>
+  {% endfor %}
+</div>
+
+<div class="section-title">
+  <div>
+    <h2>Sebaran Paket per Kota</h2>
+    <p>Dihitung langsung dari dataset.</p>
+  </div>
+</div>
+<div class="panel">
+  {% for row in per_kota %}
+  <div class="bar-row">
+    <a href="{% url 'wisata' %}?kota={{ row.kota|urlencode }}">{{ row.kota }}</a>
+    <div class="meter" style="margin:0"><span style="width: {{ row.lebar }}%"></span></div>
+    <strong>{{ row.jumlah }}</strong>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

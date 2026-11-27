@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel">
+  <h2 class="h4">Bagaimana JelajahNusa merekomendasikan paket?</h2>
+  <p class="mb-0">JelajahNusa memakai <strong>Content-Based Filtering</strong>: paket dibandingkan berdasarkan isinya (kota dan destinasi), bukan berdasarkan rating atau perilaku pengguna lain. Setiap rekomendasi dihitung langsung dari dataset <em>Indonesia Tourism Destination</em> (berkas <code>package_tourism.csv</code>) yang berisi {{ stats.total_paket }} paket di {{ stats.total_kota }} kota dengan {{ stats.total_destinasi }} destinasi unik.</p>
+</section>
+
+<div class="section-title"><div><h2>Alur Sistem</h2><p>Enam langkah dari data mentah sampai daftar rekomendasi.</p></div></div>
+<div class="flow">
+  <div class="flow-step"><div class="ico"><i class="fa-solid fa-database"></i></div><strong>Dataset</strong><small>package_tourism.csv dibaca Pandas</small></div>
+  <div class="flow-step"><div class="ico"><i class="fa-solid fa-broom"></i></div><strong>Preprocessing</strong><small>Bersihkan teks, tangani nilai kosong, gabung fitur</small></div>
+  <div class="flow-step"><div class="ico"><i class="fa-solid fa-font"></i></div><strong>TF-IDF</strong><small>Teks diubah menjadi vektor angka</small></div>
+  <div class="flow-step"><div class="ico"><i class="fa-solid fa-ruler-combined"></i></div><strong>Cosine Similarity</strong><small>Hitung kemiripan antar vektor</small></div>
+  <div class="flow-step"><div class="ico"><i class="fa-solid fa-ranking-star"></i></div><strong>Perankingan</strong><small>Urutkan dari skor tertinggi</small></div>
+  <div class="flow-step"><div class="ico"><i class="fa-solid fa-flag-checkered"></i></div><strong>Hasil Rekomendasi</strong><small>Tampilkan Top-N dalam persen</small></div>
+</div>
+
+<div class="row g-4 mt-1">
+  <div class="col-lg-4">
+    <section class="panel h-100">
+      <h3 class="h5"><i class="fa-solid fa-layer-group text-muted-jn"></i> Content-Based Filtering</h3>
+      <p>Sistem melihat <em>isi</em> setiap paket: kota dan lima destinasinya. Paket yang isinya paling mirip dengan paket pilihanmu direkomendasikan. Kelebihannya, rekomendasi tetap bisa dibuat tanpa data pengguna; keterbatasannya, hasil cenderung mirip dengan yang sudah dipilih.</p>
+    </section>
+  </div>
+  <div class="col-lg-4">
+    <section class="panel h-100">
+      <h3 class="h5"><i class="fa-solid fa-font text-muted-jn"></i> TF-IDF</h3>
+      <p>TF-IDF mengubah teks menjadi angka. Kata yang khas untuk sedikit paket diberi bobot besar, sedangkan kata yang ada di banyak paket (misalnya “paket”) diberi bobot kecil.</p>
+      <div class="formula">tfidf(t, d) = tf(t, d) × idf(t)</div>
+    </section>
+  </div>
+  <div class="col-lg-4">
+    <section class="panel h-100">
+      <h3 class="h5"><i class="fa-solid fa-ruler-combined text-muted-jn"></i> Cosine Similarity</h3>
+      <p>Mengukur kemiripan dua vektor lewat sudutnya. Hasil 0 sampai 1; ditampilkan sebagai persen. Makin besar, makin mirip.</p>
+      <div class="formula">cos(A, B) = (A · B) / (‖A‖ × ‖B‖)</div>
+    </section>
+  </div>
+</div>
+
+<div class="section-title"><div><h2>Fitur Teks yang Dibandingkan</h2></div></div>
+<section class="panel">
+  <p class="mb-2">Untuk setiap paket, sistem menggabungkan nomor paket, kota, dan destinasi yang terisi menjadi satu teks, mengubahnya menjadi huruf kecil, dan membuang tanda baca. Contoh bentuknya:</p>
+  <div class="formula">paket7 bandung nama destinasi satu nama destinasi dua …</div>
+  <p class="text-muted-jn small mt-3 mb-0">Nilai kosong (misalnya destinasi ke-4 atau ke-5 yang tidak terisi) dilewati. Paket yang sedang dipilih tidak pernah muncul sebagai rekomendasi untuk dirinya sendiri. Dataset tidak berisi harga, rating, atau durasi, sehingga tidak dipakai.</p>
+</section>
+{% endblock %}

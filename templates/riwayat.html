@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="panel">
+  <div class="d-flex flex-wrap justify-content-between gap-3 align-items-center">
+    <div>
+      <h2 class="h5 mb-1">Riwayat sesi ini</h2>
+      <p class="text-muted-jn mb-0 small">Riwayat disimpan per sesi browser tanpa akun. Bersifat sementara: berakhir bila cookie sesi dihapus atau kedaluwarsa (30 hari), dan bisa kamu hapus kapan saja.</p>
+    </div>
+    {% if items %}
+    <form method="post" action="{% url 'riwayat_hapus' %}" onsubmit="return confirm('Hapus seluruh riwayat pencarian?');">
+      {% csrf_token %}
+      <button class="btn-jn-ghost" type="submit"><i class="fa-solid fa-trash-can"></i> Hapus riwayat</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+
+{% if items %}
+  <div class="d-grid gap-2 mt-3">
+    {% for i in items %}
+      <div class="panel d-flex flex-wrap align-items-center gap-3 py-3">
+        <span class="stat-icon" style="width:42px;height:42px;font-size:1rem"><i class="fa-solid {% if i.jenis == 'rekomendasi' %}fa-wand-magic-sparkles{% else %}fa-magnifying-glass{% endif %}"></i></span>
+        <div class="me-auto">
+          <strong>{% if i.jenis == 'rekomendasi' %}Rekomendasi: {{ i.query }}{% else %}Pencarian: “{{ i.query }}”{% if i.kota %} di {{ i.kota }}{% endif %}{% endif %}</strong>
+          <div class="text-muted-jn small">{{ i.created_at|date:"d M Y, H:i" }} · {{ i.get_jenis_display }}</div>
+        </div>
+        {% if i.jenis == 'rekomendasi' %}
+          <a class="btn-jn btn-sm-jn" href="{% url 'rekomendasi' %}?paket={{ i.package_id }}">Ulangi</a>
+        {% else %}
+          <a class="btn-jn btn-sm-jn" href="{% url 'wisata' %}?q={{ i.query|urlencode }}{% if i.kota %}&amp;kota={{ i.kota|urlencode }}{% endif %}">Ulangi</a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="panel text-center py-5 mt-3">
+    <i class="fa-regular fa-clock fa-2x text-muted-jn mb-2"></i>
+    <h2 class="h5">Belum ada riwayat</h2>
+    <p class="text-muted-jn">Pencarian di Jelajahi Wisata dan hasil Rekomendasi Paket akan muncul di sini.</p>
+    <a class="btn-jn" href="{% url 'wisata' %}">Mulai menjelajah</a>
+  </div>
+{% endif %}
+{% endblock %}

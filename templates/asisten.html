@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-7">
+    <section class="panel">
+      <h2 class="h4">JelajahNusa AI Assistant</h2>
+      <p>Tanyakan cara memakai website, penjelasan TF-IDF dan Cosine Similarity, paket di suatu kota, atau paket yang mirip dengan paket tertentu. Jendela chat juga tersedia di pojok kanan bawah setiap halaman.</p>
+      <p class="mb-3">
+        {% if ai_aktif %}
+          <span class="chip"><i class="fa-solid fa-bolt"></i> Mode AI eksternal aktif ({{ provider }})</span>
+        {% else %}
+          <span class="chip sand"><i class="fa-solid fa-gears"></i> Mode dasar (berbasis aturan + dataset, bukan AI generatif)</span>
+        {% endif %}
+      </p>
+      <button class="btn-jn" type="button" data-chat-open><i class="fa-solid fa-comments"></i> Buka chat</button>
+    </section>
+  </div>
+  <div class="col-lg-5">
+    <section class="panel">
+      <h3 class="h6 mb-3">Coba tanyakan</h3>
+      <div class="d-grid gap-2">
+        <button class="btn-jn-soft text-start" type="button" data-chat-prompt="Apa itu TF-IDF?">Apa itu TF-IDF?</button>
+        <button class="btn-jn-soft text-start" type="button" data-chat-prompt="Jelaskan Cosine Similarity">Jelaskan Cosine Similarity</button>
+        <button class="btn-jn-soft text-start" type="button" data-chat-prompt="Kota apa saja yang ada di dataset?">Kota apa saja yang ada di dataset?</button>
+        <button class="btn-jn-soft text-start" type="button" data-chat-prompt="Berapa jumlah paket di dataset?">Berapa jumlah paket di dataset?</button>
+        <button class="btn-jn-soft text-start" type="button" data-chat-prompt="Paket mirip paket 1">Paket mirip paket 1</button>
+        <button class="btn-jn-soft text-start" type="button" data-chat-prompt="Bagaimana cara memakai website ini?">Bagaimana cara memakai website ini?</button>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

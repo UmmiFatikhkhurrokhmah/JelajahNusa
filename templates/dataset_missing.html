@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel" style="max-width:760px;margin:2rem auto">
+  <h2 class="h4"><i class="fa-solid fa-triangle-exclamation text-warning"></i> Dataset belum siap</h2>
+  <p>{{ error }}</p>
+  <p>Letakkan berkas <code>package_tourism.csv</code> dari Kaggle <em>Indonesia Tourism Destination</em> di lokasi berikut, lalu muat ulang halaman:</p>
+  <div class="formula" style="font-size:.9rem">{{ dataset_path }}</div>
+  <p class="mt-3 mb-1">Kolom yang wajib ada: <code>Package, City, Place_Tourism1 … Place_Tourism5</code>.</p>
+  <a class="btn-jn mt-3" href="https://www.kaggle.com/datasets/aprabowo/indonesia-tourism-destination" target="_blank" rel="noopener"><i class="fa-solid fa-download"></i> Buka halaman dataset di Kaggle</a>
+</section>
+{% endblock %}

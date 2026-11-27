@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<form class="panel filter-bar" method="get" action="{% url 'wisata' %}" role="search">
+  <input class="form-control" type="search" name="q" value="{{ q }}" placeholder="Cari nomor paket, kota, atau nama destinasi…" aria-label="Kata kunci">
+  <select class="form-select" name="kota" aria-label="Filter kota">
+    <option value="">Semua kota</option>
+    {% for c in cities %}<option value="{{ c }}" {% if c == kota %}selected{% endif %}>{{ c }}</option>{% endfor %}
+  </select>
+  <div class="d-flex gap-2">
+    <button class="btn-jn" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Cari</button>
+    {% if q or kota %}<a class="btn-jn-ghost" href="{% url 'wisata' %}">Reset</a>{% endif %}
+  </div>
+</form>
+
+<p class="text-muted-jn mt-3 mb-3">Menampilkan <strong>{{ total }}</strong> paket{% if q %} untuk “{{ q }}”{% endif %}{% if kota %} di {{ kota }}{% endif %}.</p>
+
+{% if page_obj.object_list %}
+  <div class="row g-4">
+    {% for p in page_obj %}
+      <div class="col-md-6 col-xl-4">{% include "_paket_card.html" %}</div>
+    {% endfor %}
+  </div>
+  {% include "_pagination.html" %}
+{% else %}
+  <div class="panel text-center py-5">
+    <i class="fa-regular fa-face-frown fa-2x text-muted-jn mb-2"></i>
+    <h2 class="h5">Tidak ada paket yang cocok</h2>
+    <p class="text-muted-jn mb-3">Coba kata kunci lain, misalnya nama kota atau satu kata dari nama destinasi.</p>
+    <a class="btn-jn" href="{% url 'wisata' %}">Tampilkan semua paket</a>
+  </div>
+{% endif %}
+{% endblock %}

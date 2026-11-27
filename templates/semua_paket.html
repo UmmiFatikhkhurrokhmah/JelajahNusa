@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<form class="panel d-flex flex-wrap gap-2 align-items-center" method="get" action="{% url 'semua_paket' %}">
+  <label for="kota" class="fw-semibold me-1">Kota</label>
+  <select class="form-select w-auto" id="kota" name="kota" onchange="this.form.submit()">
+    <option value="">Semua kota</option>
+    {% for c in cities %}<option value="{{ c }}" {% if c == kota %}selected{% endif %}>{{ c }}</option>{% endfor %}
+  </select>
+  <noscript><button class="btn-jn" type="submit">Terapkan</button></noscript>
+  <span class="ms-auto text-muted-jn">{{ total }} paket</span>
+</form>
+
+<div class="panel mt-3 p-0" style="overflow-x:auto">
+  <table class="table-jn">
+    <thead>
+      <tr><th>Paket</th><th>Kota</th><th>Destinasi 1</th><th>Destinasi 2</th><th>Destinasi 3</th><th>Destinasi 4</th><th>Destinasi 5</th><th>Aksi</th></tr>
+    </thead>
+    <tbody>
+      {% for p in page_obj %}
+      <tr>
+        <td><strong>{{ p.id }}</strong></td>
+        <td>{{ p.kota }}</td>
+        {% for t in p.slots %}<td>{% if t %}{{ t }}{% else %}<span class="text-muted-jn">–</span>{% endif %}</td>{% endfor %}
+        <td style="white-space:nowrap">
+          <a class="btn-jn btn-sm-jn" href="{% url 'detail_paket' p.id %}">Detail</a>
+          <a class="btn-jn-soft btn-sm-jn" href="{% url 'rekomendasi' %}?paket={{ p.id }}">Serupa</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include "_pagination.html" %}
+{% endblock %}

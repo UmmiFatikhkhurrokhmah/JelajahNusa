@@ -1,0 +1,24 @@
+{% load jn_tags %}
+<article class="paket-card city-{{ p.kota|slugify }}">
+  {% foto_kota p.kota as foto %}
+  <div class="cover{% if foto %} has-photo{% endif %}" role="img"
+    aria-label="{% if foto %}Foto{% else %}Ilustrasi{% endif %} kota {{ p.kota }}">
+    {% if foto %}<img src="{{ foto }}" alt="" loading="lazy">{% else %}
+    <i class="fa-solid {{ p.kota|city_icon }}"></i>
+    <span class="cover-tag">Ilustrasi</span>{% endif %}
+  </div>
+  <div class="paket-body">
+    <div class="d-flex justify-content-between align-items-start gap-2">
+      <h3>{{ p.label }}</h3>
+      <span class="chip"><i class="fa-solid fa-location-dot"></i>{{ p.kota }}</span>
+    </div>
+    <ul class="dest-list">
+      {% for t in p.tempat %}<li>{{ t }}</li>{% endfor %}
+    </ul>
+    <div class="card-actions">
+      <a class="btn-jn btn-sm-jn" href="{% url 'detail_paket' p.id %}"><i class="fa-solid fa-eye"></i> Detail</a>
+      <a class="btn-jn-soft btn-sm-jn" href="{% url 'rekomendasi' %}?paket={{ p.id }}"><i
+          class="fa-solid fa-wand-magic-sparkles"></i> Rekomendasikan</a>
+    </div>
+  </div>
+</article>
